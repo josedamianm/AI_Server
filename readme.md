@@ -33,7 +33,9 @@ If you want to follow along with everything I am doing, you can sign up for a Ho
 6.  Edit /etc/ssh/sshd_config
 
     a. Change `PasswordAuthentication` from `yes` to `no`
+
     b. Change `PermitRootLogin` from `yes` to `no`
+
     c. Change `UsePAM` from `yes` to `no`
 
 7.  Delete /etc/ssh/sshd_config.d/50-cloud-init.conf
