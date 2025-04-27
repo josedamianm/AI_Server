@@ -47,4 +47,5 @@ If you want to follow along with everything I am doing, you can sign up for a Ho
 
 1. Navigate into the n8n directory: `cd homelab/n8n`
 2. Edit the docker-compose.yaml file.
-   a.
+
+   a. .
