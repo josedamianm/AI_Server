@@ -1,14 +1,32 @@
 services:
   redis:
     image: redis/redis-stack:7.2.0-v10
-    expose:
-      - 6379
-      - 8001
     command: [ "/entrypoint.sh", "./redis-stack.conf" ]
     healthcheck:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
     volumes:
       - redis_data:/data
+    network_mode: service:redis-on-hstgr
+
+  redis-on-hstgr:
+    image: tailscale/tailscale:latest
+    hostname: redis-on-hstgr
+    ports:
+      - 6379:6379
+      - 8001:8001
+    environment:
+      - TS_AUTHKEY=tailscaleauthkey
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+    volumes:
+      - ${PWD}/tailscale-redis/state:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+    restart: unless-stopped
+
 
 volumes:
   redis_data:
+
