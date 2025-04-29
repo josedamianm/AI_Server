@@ -1,0 +1,17 @@
+services:
+  tsdproxy:
+    image: almeidapaulopt/tsdproxy:2
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - datadir:/data
+      - ./config:/config
+    restart: unless-stopped
+    secrets:
+      - authkey
+
+volumes:
+  datadir:
+
+secrets:
+  authkey:
+    external: true
