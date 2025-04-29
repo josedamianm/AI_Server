@@ -1,0 +1,47 @@
+services:
+  searxng:
+    image: docker.io/searxng/searxng:latest
+    restart: always
+    volumes:
+      - ./searxng:/etc/searxng:rw
+    network_mode: service:searxng-on-hstgr
+    environment:
+      - SEARXNG_BASE_URL=https://s.tvl.st:-localhost}/
+      - UWSGI_WORKERS=${SEARXNG_UWSGI_WORKERS:-4}
+      - UWSGI_THREADS=${SEARXNG_UWSGI_THREADS:-4}
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+
+
+
+  searxng-on-hstgr:
+    image: tailscale/tailscale:latest
+    hostname: searxng-on-hstgr
+    ports:
+      - 5678:5678
+    environment:
+      - TS_EXTRA_ARGS=--auth-key file:/run/secrets/tsauthkey
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+    volumes:
+      - ${PWD}/tailscale-n8n/state:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+    restart: unless-stopped
+    secrets:
+      - tsauthkey
+
+secrets:
+  tsauthkey:
+    file: ~/.config/tsauthkey
