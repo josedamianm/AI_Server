@@ -1,5 +1,4 @@
 defaultProxyProvider: default
-files: {}
 tailscale:
   providers:
     default: # name of the provider
