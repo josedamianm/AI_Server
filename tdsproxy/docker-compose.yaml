@@ -7,11 +7,11 @@ services:
       - ./config:/config
     restart: unless-stopped
     secrets:
-      - authkey
+      - tsdproxyauthkey
 
 volumes:
   datadir:
 
 secrets:
-  authkey:
+  tsdproxyauthkey:
     external: true
