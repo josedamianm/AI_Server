@@ -7,8 +7,6 @@ services:
     network_mode: service:searxng-on-hstgr
     environment:
       - SEARXNG_BASE_URL=https://s.tvl.st:-localhost}/
-      - UWSGI_WORKERS=${SEARXNG_UWSGI_WORKERS:-4}
-      - UWSGI_THREADS=${SEARXNG_UWSGI_THREADS:-4}
     cap_drop:
       - ALL
     cap_add:
