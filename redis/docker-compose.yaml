@@ -7,10 +7,12 @@ services:
     volumes:
       - redis_data:/data
     network_mode: service:redis-on-hstgr
+    container_name: redis
 
   redis-on-hstgr:
     image: tailscale/tailscale:latest
     hostname: redis-on-hstgr
+    container_name: redis-on-hstgr
     ports:
       - 6379:6379
       - 8001:8001
