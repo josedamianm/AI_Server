@@ -5,16 +5,8 @@ services:
   n8n:
     image: docker.n8n.io/n8nio/n8n
     restart: always
-    environment:
-      - N8N_HOST=hostnameforn8n
-      - N8N_PORT=5678
-      - N8N_PROTOCOL=https
-      - NODE_ENV=production
-      - WEBHOOK_URL=https://hostnameforn8n/
-      - N8N_DIAGNOSTICS_ENABLED=false
-      - N8N_VERSION_NOTIFICATIONS_ENABLED=false
-      - N8N_HIDE_USAGE_PAGE=true
-      - GENERIC_TIMEZONE=America/Los_Angeles
+    env_file:
+      - ".env"
     volumes:
       - n8n_storage:/home/node/.n8n
       - ./local_files:/files
@@ -26,7 +18,7 @@ services:
     ports:
       - 5678:5678
     environment:
-      - TS_AUTHKEY=tailscaleauthkey
+      - TS_EXTRA_ARGS="--auth-key file:/run/secrets/tsauthkey"
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_USERSPACE=false
     volumes:
@@ -37,5 +29,8 @@ services:
       - net_admin
     restart: unless-stopped
 
+secrets:
+  tsauthkey:
+    file: ~/.config/tsauthkey
 
     
