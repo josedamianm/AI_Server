@@ -3,7 +3,7 @@ files: {}
 tailscale:
   providers:
     default: # name of the provider
-      authKeyFile: "/run/secrets/tsdproxyauthkey"
+      authKeyFile: "/run/secrets/tsauthkey"
       controlUrl: https://controlplane.tailscale.com # use this to override the default control URL
 http:
   hostname: 0.0.0.0
