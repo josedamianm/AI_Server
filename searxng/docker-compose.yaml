@@ -5,8 +5,9 @@ services:
     volumes:
       - ./searxng:/etc/searxng:rw
     network_mode: service:searxng-on-hstgr
+    env_file:
+      - ".env"
     environment:
-      - SEARXNG_BASE_URL=https://s.tvl.st:-localhost}/
       - SEARXNG_SECRET=file:/run/secrets/searxng_secret
     cap_drop:
       - ALL
