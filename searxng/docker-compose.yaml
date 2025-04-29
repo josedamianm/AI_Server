@@ -7,6 +7,7 @@ services:
     network_mode: service:searxng-on-hstgr
     environment:
       - SEARXNG_BASE_URL=https://s.tvl.st:-localhost}/
+      - SEARXNG_SECRET=file:/run/secrets/searxng_secret
     cap_drop:
       - ALL
     cap_add:
@@ -18,6 +19,8 @@ services:
       options:
         max-size: "1m"
         max-file: "1"
+    secrets:
+      - searxng_secret
 
 
 
@@ -43,3 +46,5 @@ services:
 secrets:
   tsauthkey:
     file: ~/.config/tsauthkey
+  searxng_secret:
+    file: ~/.config/searxng_secret
