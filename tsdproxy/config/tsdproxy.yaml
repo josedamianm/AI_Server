@@ -1,4 +1,8 @@
 defaultProxyProvider: default
+docker:
+  local:
+    host: unix:///var/run/docker.sock
+    defaultProxyProvider: default
 tailscale:
   providers:
     default: # name of the provider
