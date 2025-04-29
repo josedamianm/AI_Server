@@ -1,3 +1,0 @@
-n.mydomain.com {
-	reverse_proxy hostnameforn8n:5678
-}
