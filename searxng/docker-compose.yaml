@@ -29,7 +29,7 @@ services:
     image: tailscale/tailscale:latest
     hostname: searxng-on-hstgr
     ports:
-      - 8888:8888
+      - 8080:8080
     environment:
       - TS_EXTRA_ARGS=--auth-key file:/run/secrets/tsauthkey
       - TS_STATE_DIR=/var/lib/tailscale
