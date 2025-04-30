@@ -17,9 +17,10 @@ This is a collection of docker-compose files for my home lab. There will be a vi
 
 I want to have a home lab that is self-hosted and runs on docker. I want to be able to access all of the services from the internet. But I don't want to let anyone access them...just me. n8n will be publicly accessible, but require authentication. The main thing that allows for this is Tailscale, which has a free plan that will let us do all we need.
 
-## Tailscale
+## Video
 
-The first step is to get a Tailscale account and add you home machine to your tailnet. You can do this by downloading the Tailscale app from the [Tailscale website](https://tailscale.com/).
+This first section is covered in a video on my channel, sponsored by [Hostinger](https://hostinger.com/mattw). Embed will be added after its posted.
+
 
 ## Hostinger
 
@@ -43,9 +44,27 @@ If you want to follow along with everything I am doing, you can sign up for a Ho
 9.  Log out and log back in as your new user.
 10. Clone this repo to your home directory: `git clone https://github.com/technovangelist/homelab.git`
 
+## Tailscale
+
+The first step is to get a Tailscale account and add you home machine to your tailnet. You can do this by downloading the Tailscale app from the [Tailscale website](https://tailscale.com/).
+
+After its installed, you need a key to add your docker containers to the tailnet. I found the easiest way to do it is to add the key to a docker secret.
+
+1.  Create a folder called `~/.config` on the home directory for the user you are logged in as. 
+2.  Create a file called `tsauthkey` in the `~/.config` folder.
+3.  Go to the tailscale admin page, click on Settings. On the left go to Keys. Click the button `Generate auth key...`.
+4.  Enable `Reusable`. Click `Generate key`.
+5.  Add the key to the `tsauthkey` file.
+6.  Make the file only readable by the user: `chmod 600 ~/.config/tsauthkey`
+
 ## n8n
 
 1. Navigate into the n8n directory: `cd homelab/n8n`
-2. Edit the docker-compose.yaml file.
+2. Copy the example.env file to .env: `cp example.env .env`
+3. Edit the .env file.
 
-   a. .
+   a. `N8N_HOST` should be the hostname of your server.
+   b.  `WEBHOOK_URL` should be the URL of your server. In my case they are the same.
+   c. `GENERIC_TIMEZONE` should be your timezone.
+
+4.  Start the n8n container: `docker compose up -d`
