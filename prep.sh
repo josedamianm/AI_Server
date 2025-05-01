@@ -54,7 +54,7 @@ fi
 # ----------------------------------------------------------------------
 #  4. Create the user with a bash login shell and add to sudoers
 # ----------------------------------------------------------------------
-useradd --create-home --shell /usr/bin/bash "$username"
+useradd --create-home "$username"
 echo "${username}:${password1}" | chpasswd
 usermod -aG sudo "$username"
 
