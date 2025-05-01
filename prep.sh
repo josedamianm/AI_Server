@@ -15,6 +15,17 @@ set -euo pipefail
 # -u  : treat unset variables as errors
 # -o pipefail : fail a pipeline if any component command fails
 
+apt-get update -qq
+DEBIAN_FRONTEND=noninteractive apt-get install -yq zsh
+
+ZSH_BIN="$(command -v zsh || true)"
+
+# Add zsh to /etc/shells if missing
+if [[ -n "$ZSH_BIN" && ! $(grep -Fx "$ZSH_BIN" /etc/shells) ]]; then
+  echo "$ZSH_BIN" >> /etc/shells
+fi
+
+
 # ----------------------------------------------------------------------
 #  1. Ask for a valid *new* username
 # ----------------------------------------------------------------------
@@ -54,7 +65,11 @@ fi
 # ----------------------------------------------------------------------
 #  4. Create the user with a bash login shell and add to sudoers
 # ----------------------------------------------------------------------
-useradd --create-home "$username"
+default_shell="/bin/bash"
+[[ -x "$ZSH_BIN" ]] && default_shell="$ZSH_BIN"
+
+useradd --create-home --shell "$default_shell" "$username"
+
 echo "${username}:${password1}" | chpasswd
 usermod -aG sudo "$username"
 
@@ -71,7 +86,23 @@ chmod 600 /home/"$username"/.ssh/authorized_keys
 chown -R "$username":"$username" /home/"$username"/.ssh
 
 # ----------------------------------------------------------------------
-#  6. Harden SSH daemon configuration
+#  6. Prep ZSH
+# ----------------------------------------------------------------------
+if [[ -x "$ZSH_BIN" ]]; then
+  cat > /home/"$username"/.zshrc <<'EOF'
+# ~/.zshrc – minimal starter file
+export HISTFILE=~/.zsh_history
+export HISTSIZE=10000
+export SAVEHIST=10000
+setopt inc_append_history share_history
+PROMPT='%F{green}%n@%m%f:%F{blue}%~%f$ '
+EOF
+  chown "$username":"$username" /home/"$username"/.zshrc
+fi
+
+
+# ----------------------------------------------------------------------
+#  7. Harden SSH daemon configuration
 # ----------------------------------------------------------------------
 SSHCFG='/etc/ssh/sshd_config'                 # main sshd config
 CLOUDINIT='/etc/ssh/sshd_config.d/50-cloud-init.conf' # cloud-init drop-in
