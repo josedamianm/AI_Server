@@ -72,6 +72,7 @@ useradd --create-home --shell "$default_shell" "$username"
 
 echo "${username}:${password1}" | chpasswd
 usermod -aG sudo "$username"
+usermod -aG docker "$username"
 
 # ----------------------------------------------------------------------
 #  5. Prepare the user’s ~/.ssh directory and copy root’s keys
@@ -146,3 +147,6 @@ cp caddy/caddyfile/Caddyfile.example caddy/caddyfile/Caddyfile
 cd ~
 mv homelab /home/$username/homelab
 chown -R $username:$username /home/$username/homelab
+
+mkdir /home/$username/.config
+chown -R $username:$username /home/$username/.config
