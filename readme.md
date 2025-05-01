@@ -68,3 +68,11 @@ After its installed, you need a key to add your docker containers to the tailnet
    c. `GENERIC_TIMEZONE` should be your timezone.
 
 4.  Start the n8n container: `docker compose up -d`
+
+## Watchtower
+
+This will update all the containers to the latest version every day at 4am
+
+1. Navigate into the watchtower directory: `cd homelab/watchtower`
+2. Change the Timezone to where ever you are. 
+3. Start the watchtower container: `docker compose up -d`
