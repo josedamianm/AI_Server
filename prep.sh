@@ -52,9 +52,9 @@ if id "$username" &>/dev/null; then
 fi
 
 # ----------------------------------------------------------------------
-#  4. Create the user with a basd login shell and add to sudoers
+#  4. Create the user with a bash login shell and add to sudoers
 # ----------------------------------------------------------------------
-useradd --create-home --shell /bin/bash "$username"
+useradd --create-home --shell /usr/bin/bash "$username"
 echo "${username}:${password1}" | chpasswd
 usermod -aG sudo "$username"
 
