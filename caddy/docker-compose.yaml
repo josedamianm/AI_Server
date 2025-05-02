@@ -13,5 +13,3 @@ services:
     - ${VOLUMEROOT}/data:/data
     - ${VOLUMEROOT}/config:/config
     - ${VOLUMEROOT}/caddyfile:/etc/caddy
-    env_file:
-      - ".env"
