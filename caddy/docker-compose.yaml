@@ -13,5 +13,3 @@ services:
     - ${PWD}/data:/data
     - ${PWD}/config:/config
     - ${PWD}/caddyfile:/etc/caddy
-    env_file:
-      - ".env"
