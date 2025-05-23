@@ -10,6 +10,6 @@ services:
     - "443:443"
     - "443:443/udp"
     volumes:
-    - ${VOLUMEROOT}/data:/data
-    - ${VOLUMEROOT}/config:/config
-    - ${VOLUMEROOT}/caddyfile:/etc/caddy
+    - ${PWD}/data:/data
+    - ${PWD}/config:/config
+    - ${PWD}/caddyfile:/etc/caddy
