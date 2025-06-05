@@ -6,7 +6,7 @@ n.mydomain.com {
 	reverse_proxy n8n-on-hstgr:5678
 }
 
-s.tvl.st {
+s.mydomain.com {
     reverse_proxy searxng-on-hstgr:8080
     tls {
         dns cloudflare {env.CLOUDFLARE_API_TOKEN}
