@@ -8,7 +8,7 @@ ui:
   static_use_hash: true
   default_theme: simple
 redis:
-  url: redis://redis:6379/0
+  url: redis://redis-on-hstgr:6379
 search:
   formats:
     - html
