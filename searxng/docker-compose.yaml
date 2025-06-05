@@ -5,9 +5,14 @@ services:
     restart: unless-stopped
     network_mode: service:searxng-on-hstgr
     volumes:
-      - ./config:/etc/searxng:rw
+      - ./config:/etc/searxng:ro
     env_file:
       - .env
+    cap_add:
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+      - CHOWN
     logging:
       driver: "json-file"
       options:
