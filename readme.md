@@ -21,8 +21,7 @@ I want to have a home lab that is self-hosted and runs on docker. I want to be a
 
 This first section is covered in a video on my channel, sponsored by [Hostinger](https://hostinger.com/mattw). 
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/OmWJPJ1CR7M?si=4Y8zYPTMnrlVni2a" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
+[![Zero to MCP](http://img.youtube.com/vi/OmWJPJ1CR7M/0.jpg)](http://www.youtube.com/watch?v=OmWJPJ1CR7M "Zero to MCP")
 
 ## Hostinger
 
