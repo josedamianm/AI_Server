@@ -144,6 +144,11 @@ echo "✅ User $username created and SSH hardened successfully."
 cp n8n/example.env n8n/.env
 cp watchtower/example.env watchtower/.env
 cp caddy/caddyfile/Caddyfile.example caddy/caddyfile/Caddyfile
+cp caddy2/Caddyfile.example caddy2/Caddyfile
+cp searxng/example.env searxng/.env
+cp searxng/config/settings.yml.example searxng/config/settings.yml
+cp openwebui/example.env openwebui/.env
+
 cd ~
 mv homelab /home/$username/homelab
 chown -R $username:$username /home/$username/homelab
