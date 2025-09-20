@@ -1,3 +1,0 @@
-n.mydomain.com {
-	reverse_proxy n8n-on-hstgr:5678
-}

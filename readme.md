@@ -1,3 +1,5 @@
+# Note: I removed the original version of the caddy setup, in favor of what used to be caddy2. The original Caddy is still in caddy-orig.
+
 This is a collection of docker-compose files for my home lab. There will be a video added for each service over time. I will be using Hostinger for all hosting. Visit [Hostinger](https://hostinger.com/mattw) for more information. If you sign up for anything there, use coupon code `mattw` for 10% off.
 
 ## Services
@@ -28,8 +30,18 @@ This first section is covered in a video on my channel, sponsored by [Hostinger]
 
 If you want to follow along with everything I am doing, you can sign up for a Hostinger account at [Hostinger](https://hostinger.com/mattw) and use the coupon code `mattw` for 10% off. Select the KVM2 plan. You can choose any template you like, but I am going to start with just the Docker install. Once it is setup, either use the web terminal interface or ssh into the root user. You should see a `ssh root@ipaddress` command. Copy that and run it on your local machine. Enter the password you specified when you created the account. 
 
-Run `git clone https://github.com/technovangelist/homelab.git` to clone this repo. cd into the homelab directory and run `./prep.sh` to prepare the system. Optionally review prep.sh to see what it does.
+Run `git clone https://github.com/technovangelist/homelab.git` to clone this repo. cd into the homelab directory and run `./prep.sh` to prepare the system. Optionally review prep.sh first to see what it does.
 
+After running the script, you will need to log out. Before logging back in, let's edit your ssh config file to make it easier to connect. Think of the name you would like to use to connect. I use hstgr throughout the videos, so I will use that. If you don't have a config file, create one at `~/.ssh/config`. You want at least this entry:
+
+```
+Host hstgr
+    HostName ipaddress
+    User theusernameyoucreated
+    IdentityFile ~/.ssh/thekeyyoucreatedintheinstall
+```
+
+Save that. Then you can run `ssh hstgr` to connect to your server. 
 
 SSH into the server as the user root and we need to do a few things.
 

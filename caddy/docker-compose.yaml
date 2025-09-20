@@ -1,16 +1,18 @@
 services:
   caddy:
-    image: caddy:latest
-    container_name: caddy_public
+    build: .
+    container_name: caddy
+    hostname: caddy
     restart: unless-stopped
-    cap_add:
-    - NET_ADMIN
+    env_file:
+      - ".env"
     ports:
-    - "80:80"
-    - "443:443"
-    - "443:443/udp"
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
     volumes:
-    - ~/webpages:/webpages
-    - ${PWD}/data:/data
-    - ${PWD}/config:/config
-    - ${PWD}/caddyfile:/etc/caddy
+      - ~/homelab/webpages:/webpages
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./data:/data
+      - ./config:/config
+      - /var/run/docker.sock:/var/run/docker.sock

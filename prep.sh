@@ -16,7 +16,7 @@ set -euo pipefail
 # -o pipefail : fail a pipeline if any component command fails
 
 apt-get update -qq
-DEBIAN_FRONTEND=noninteractive apt-get install -yq zsh
+DEBIAN_FRONTEND=noninteractive apt-get install -yq zsh exa
 
 ZSH_BIN="$(command -v zsh || true)"
 
@@ -96,6 +96,7 @@ export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=10000
 setopt inc_append_history share_history
+alias la='exa -la'
 PROMPT='%F{green}%n@%m%f:%F{blue}%~%f$ '
 EOF
   chown "$username":"$username" /home/"$username"/.zshrc
@@ -144,11 +145,13 @@ echo "Log off and then ssh back into the server as $username."
 
 cp n8n/example.env n8n/.env
 cp watchtower/example.env watchtower/.env
-cp caddy/caddyfile/Caddyfile.example caddy/caddyfile/Caddyfile
-cp caddy2/Caddyfile.example caddy2/Caddyfile
+cp caddy/Caddyfile.example caddy2/Caddyfile
 cp searxng/example.env searxng/.env
 cp searxng/config/settings.yml.example searxng/config/settings.yml
 cp openwebui/example.env openwebui/.env
+cp karakeep/example.env karakeep/.env
+cp postgres/example.env postgres/.env
+cp watchtower/example.env watchtower/.env
 
 cd ~
 mv homelab /home/$username/homelab
