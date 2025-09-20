@@ -16,7 +16,7 @@ set -euo pipefail
 # -o pipefail : fail a pipeline if any component command fails
 
 apt-get update -qq
-DEBIAN_FRONTEND=noninteractive apt-get install -yq zsh exa
+DEBIAN_FRONTEND=noninteractive apt-get install -yq zsh eza
 
 ZSH_BIN="$(command -v zsh || true)"
 
@@ -96,7 +96,7 @@ export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=10000
 setopt inc_append_history share_history
-alias la='exa -la'
+alias la='eza -la'
 PROMPT='%F{green}%n@%m%f:%F{blue}%~%f$ '
 EOF
   chown "$username":"$username" /home/"$username"/.zshrc
