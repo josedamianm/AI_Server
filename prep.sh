@@ -144,8 +144,8 @@ echo "✅ User $username created and SSH hardened successfully."
 echo "Log off and then ssh back into the server as $username."
 
 cp n8n/example.env n8n/.env
-cp watchtower/example.env watchtower/.env
-cp caddy/Caddyfile.example caddy2/Caddyfile
+cp caddy/Caddyfile.example caddy/Caddyfile
+cp caddy/example.env caddy/.env
 cp searxng/example.env searxng/.env
 cp searxng/config/settings.yml.example searxng/config/settings.yml
 cp openwebui/example.env openwebui/.env
