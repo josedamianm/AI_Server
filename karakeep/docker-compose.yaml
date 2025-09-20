@@ -3,18 +3,14 @@ services:
     image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-release}
     restart: unless-stopped
     volumes:
-      # By default, the data is stored in a docker volume called "data".
-      # If you want to mount a custom directory, change the volume mapping to:
-      # - /path/to/your/directory:/data
       - ./data:/data
-    ports:
-      - 3000:3000
+
     env_file:
       - .env
     environment:
       MEILI_ADDR: http://meilisearch:7700
       BROWSER_WEB_URL: http://chrome:9222
-      DATA_DIR: /data # DON'T CHANGE THIS
+      DATA_DIR: /data
       network_mode: service:karakeep-on-hstgr
 
   chrome:
@@ -37,21 +33,23 @@ services:
     volumes:
       - meilisearch:/meili_data
   karakeep-on-hstgr:
-      image: tailscale/tailscale:latest
-      hostname: karakeep-on-hstgr
-      environment:
-        - TS_EXTRA_ARGS=--auth-key file:/run/secrets/tsauthkey
-        - TS_STATE_DIR=/var/lib/tailscale
-        - TS_USERSPACE=false
-      volumes:
-        - ${PWD}/tailscale-state:/var/lib/tailscale
-      devices:
-        - /dev/net/tun:/dev/net/tun
-      cap_add:
-        - net_admin
-      restart: unless-stopped
-      secrets:
-        - tsauthkey
+    image: tailscale/tailscale:latest
+    hostname: karakeep-on-hstgr
+    ports:
+      - 3000:3000
+    environment:
+      - TS_EXTRA_ARGS=--auth-key file:/run/secrets/tsauthkey
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+    volumes:
+      - ${PWD}/tailscale-state:/var/lib/tailscale
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+    restart: unless-stopped
+    secrets:
+      - tsauthkey
 volumes:
   meilisearch:
   data:

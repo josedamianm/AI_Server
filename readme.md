@@ -6,6 +6,7 @@ This is a collection of docker-compose files for my home lab. There will be a vi
 - searxng
 - perplexica
 - firecrawl
+- karakeep
 - openwebui
 - qdrant
 - budibase
@@ -25,29 +26,20 @@ This first section is covered in a video on my channel, sponsored by [Hostinger]
 
 ## Hostinger
 
-If you want to follow along with everything I am doing, you can sign up for a Hostinger account at [Hostinger](https://hostinger.com/mattw) and use the coupon code `mattw` for 10% off. Select the KVM2 plan. You can choose any template you like, but I am going to start with just the Docker install. Once it is setup, SSH into the server as the user root and we need to do a few things.
+If you want to follow along with everything I am doing, you can sign up for a Hostinger account at [Hostinger](https://hostinger.com/mattw) and use the coupon code `mattw` for 10% off. Select the KVM2 plan. You can choose any template you like, but I am going to start with just the Docker install. Once it is setup, either use the web terminal interface or ssh into the root user. You should see a `ssh root@ipaddress` command. Copy that and run it on your local machine. Enter the password you specified when you created the account. 
 
-1.  Create a new user account. You could use the default `ubuntu` user, but I prefer to create a new one for my name, matt. You use your name. `adduser matt`.
-2.  Allow the user to sudo: `usermod -aG sudo matt`
-3.  Add your user to the docker group: `sudo usermod -aG docker matt`
-4.  Log out and copy your public key to the server: `ssh-copy-id -i keyname matt@<your-server-ip>`
-5.  SSH in as the new user: `ssh matt@<your-server-ip>`
-6.  Edit /etc/ssh/sshd_config
+Run `git clone https://github.com/technovangelist/homelab.git` to clone this repo. cd into the homelab directory and run `./prep.sh` to prepare the system. Optionally review prep.sh to see what it does.
 
-    a. Change `PasswordAuthentication` from `yes` to `no`
 
-    b. Change `PermitRootLogin` from `yes` to `no`
+SSH into the server as the user root and we need to do a few things.
 
-    c. Change `UsePAM` from `yes` to `no`
+The first step is to clone this repo to your home directory: `git clone https://github.com/technovangelist/homelab.git`.
 
-7.  Delete /etc/ssh/sshd_config.d/50-cloud-init.conf
-8.  Restart the ssh service: `sudo systemctl restart ssh`
-9.  Log out and log back in as your new user.
-10. Clone this repo to your home directory: `git clone https://github.com/technovangelist/homelab.git`
+Next, we need to prepare the system for our user. Run the `prep.sh` script: `./prep.sh`. This does a lot to prep the server, like secure SSH and more. You can see the details in the video or read the script. 
 
 ## Tailscale
 
-The first step is to get a Tailscale account and add you home machine to your tailnet. You can do this by downloading the Tailscale app from the [Tailscale website](https://tailscale.com/).
+Then you need to get a Tailscale account and add you home machine to your tailnet. You can do this by downloading the Tailscale app from the [Tailscale website](https://tailscale.com/).
 
 After its installed, you need a key to add your docker containers to the tailnet. I found the easiest way to do it is to add the key to a docker secret.
 
@@ -57,6 +49,13 @@ After its installed, you need a key to add your docker containers to the tailnet
 4.  Enable `Reusable`. Click `Generate key`.
 5.  Add the key to the `tsauthkey` file.
 6.  Make the file only readable by the user: `chmod 600 ~/.config/tsauthkey`
+
+## DNS
+
+You will need to add a CNAME record to your DNS for the domain you want to use. I am using Cloudflare, but you can use any DNS provider. The record should point to your server's public IP address.
+
+
+
 
 ## n8n
 
@@ -70,10 +69,19 @@ After its installed, you need a key to add your docker containers to the tailnet
 
 4.  Start the n8n container: `docker compose up -d`
 
+## Caddy
+
+When I setup Caddy in the first video, I used a simpler method. You may want to review this then skip on to caddy2 later on. 
+
+Edit the caddyfile/Caddyfile and replace n.mydomain.com with your chosen domain name. 
+
+Then start up the server with `docker compose up -d`
+
 ## Watchtower
 
 This will update all the containers to the latest version every day at 4am
 
 1. Navigate into the watchtower directory: `cd homelab/watchtower`
-2. Change the Timezone to where ever you are. 
+2. Edit the .env file and change the `TZ` to where ever you are. 
 3. Start the watchtower container: `docker compose up -d`
+

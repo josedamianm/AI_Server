@@ -140,6 +140,7 @@ fi
 systemctl restart ssh      # graceful restart (Ubuntu service name)
 
 echo "✅ User $username created and SSH hardened successfully."
+echo "Log off and then ssh back into the server as $username."
 
 cp n8n/example.env n8n/.env
 cp watchtower/example.env watchtower/.env
