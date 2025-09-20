@@ -153,6 +153,17 @@ cp karakeep/example.env karakeep/.env
 cp postgres/example.env postgres/.env
 cp watchtower/example.env watchtower/.env
 
+MEILI_MASTER_KEY="$(openssl rand -base64 36 | tr -dc 'A-Za-z0-9')"
+NEXTAUTH_SECRET="$(openssl rand -base64 36)"
+
+KK_ENV_FILE="karakeep/.env"
+
+tmp_file="$(mktemp)"
+sed \
+    -e "s|^MEILI_MASTER_KEY=\[generate with <openssl rand -base64 36 \| tr -dc 'A-Za-z0-9'>\]\s*$|MEILI_MASTER_KEY=${MEILI_MASTER_KEY}|" \
+    -e "s|^NEXTAUTH_SECRET=\[generate with <openssl rand -base64 36>\]\s*$|NEXTAUTH_SECRET=${NEXTAUTH_SECRET}|" \
+    "$KK_ENV_FILE" > "$tmp_file" && mv "$tmp_file" "$KK_ENV_FILE"
+
 cd ~
 mv homelab /home/$username/homelab
 chown -R $username:$username /home/$username/homelab
