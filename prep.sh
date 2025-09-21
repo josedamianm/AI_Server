@@ -52,8 +52,9 @@ while true; do
     else
         echo "⚠️  Passwords do not match. Please try again."
     fi
-    read -rp "Enter the domain name you want to use: (you should already own it)" domain; echo
 done
+
+read -rp "Enter the domain name you want to use: (you should already own it)" domain; echo
 
 # ----------------------------------------------------------------------
 #  3. Abort early if the user already exists
