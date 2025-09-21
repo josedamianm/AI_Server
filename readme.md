@@ -43,11 +43,9 @@ Host hstgr
 
 Save that. Then you can run `ssh hstgr` to connect to your server. 
 
-SSH into the server as the user root and we need to do a few things.
+### Hostinger Firewall
 
-The first step is to clone this repo to your home directory: `git clone https://github.com/technovangelist/homelab.git`.
-
-Next, we need to prepare the system for our user. Run the `prep.sh` script: `./prep.sh`. This does a lot to prep the server, like secure SSH and more. You can see the details in the video or read the script. 
+Now that you are in, lets go to the [Hostinger HPanel](https://hpanel.hostinger.com). Click **Manage** next to the VPS you created.  Under the panel with the stats for your VPS, click **Firewall**. Click the add firewall button and give it a name. Click the 3 dots and choose Edit. You want a rule that drops everything, then add a rule to accept HTTPS, and another to accept SSH. Set the source for all of them to be Any. Then make sure that firewall is enabled. 
 
 ## Tailscale
 

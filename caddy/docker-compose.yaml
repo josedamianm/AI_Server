@@ -5,11 +5,11 @@ services:
     hostname: caddy
     restart: unless-stopped
     env_file:
-      - ".env"
+      - .env
     ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
+      - 80:80
+      - 443:443
+      - 443:443/udp
     volumes:
       - ~/homelab/webpages:/webpages
       - ./Caddyfile:/etc/caddy/Caddyfile:ro

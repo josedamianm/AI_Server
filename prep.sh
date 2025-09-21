@@ -52,6 +52,7 @@ while true; do
     else
         echo "⚠️  Passwords do not match. Please try again."
     fi
+    read -rp "Enter the domain name you want to use: (you should already own it)" domain; echo
 done
 
 # ----------------------------------------------------------------------
@@ -144,7 +145,7 @@ echo "✅ User $username created and SSH hardened successfully."
 echo "Log off and then ssh back into the server as $username."
 
 cp n8n/example.env n8n/.env
-cp caddy/Caddyfile.example caddy/Caddyfile
+# cp caddy/Caddyfile.example caddy/Caddyfile
 cp caddy/example.env caddy/.env
 cp searxng/example.env searxng/.env
 cp searxng/config/settings.yml.example searxng/config/settings.yml
@@ -163,7 +164,7 @@ sed \
     -e "s|^MEILI_MASTER_KEY=\[generate with <openssl rand -base64 36 \| tr -dc 'A-Za-z0-9'>\]\s*$|MEILI_MASTER_KEY=${MEILI_MASTER_KEY}|" \
     -e "s|^NEXTAUTH_SECRET=\[generate with <openssl rand -base64 36>\]\s*$|NEXTAUTH_SECRET=${NEXTAUTH_SECRET}|" \
     "$KK_ENV_FILE" > "$tmp_file" && mv "$tmp_file" "$KK_ENV_FILE"
-
+sed -e "s|mydomain.com|${domain}|g" caddy/Caddyfile.example > caddy/Caddyfile
 cd ~
 mv homelab /home/$username/homelab
 chown -R $username:$username /home/$username/homelab

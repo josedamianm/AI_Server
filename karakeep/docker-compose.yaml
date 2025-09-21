@@ -4,7 +4,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./data:/data
-
     env_file:
       - .env
     environment:
@@ -12,7 +11,6 @@ services:
       BROWSER_WEB_URL: http://chrome:9222
       DATA_DIR: /data
       network_mode: service:karakeep-on-hstgr
-
   chrome:
     image: gcr.io/zenika-hub/alpine-chrome:124
     restart: unless-stopped
@@ -35,8 +33,6 @@ services:
   karakeep-on-hstgr:
     image: tailscale/tailscale:latest
     hostname: karakeep-on-hstgr
-    ports:
-      - 3000:3000
     environment:
       - TS_EXTRA_ARGS=--auth-key file:/run/secrets/tsauthkey
       - TS_STATE_DIR=/var/lib/tailscale
