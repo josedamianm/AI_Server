@@ -6,8 +6,6 @@ services:
       - ./data:/data
     env_file:
       - .env
-    ports:
-      - 3000:3000
     environment:
       MEILI_ADDR: http://meilisearch:7700
       BROWSER_WEB_URL: http://chrome:9222
