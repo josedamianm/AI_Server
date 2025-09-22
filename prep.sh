@@ -163,7 +163,7 @@ sed -e "s|mydomain.com|${domain}|g" caddy/Caddyfile.example > caddy/Caddyfile
 sed -e "s|mydomain.com|${domain}|g" karakeep/example.env > karakeep/.env
 sed -e "s|mydomain.com|${domain}|g" n8n/example.env > n8n/.env
 sed -e "s|mydomain.com|${domain}|g" searxng/example.env > searxng/.env
-sed -e "s|mydomain.com|${domain}|g" -d "s|webuisecret|${WEBUI_SECRET}" openwebui/example.env > openwebui/.env
+sed -e "s|mydomain.com|${domain}|g" -e "s|webuisecret|${WEBUI_SECRET}" openwebui/example.env > openwebui/.env
 sed -e "s|searxngsecret|${SEARXNG_SECRET}|g" searxng/config/settings.yml.example > searxng/config/settings.yml
 sed -e "s|postgrespassword|${POSTGRES_PASSWORD}|g" postgres/example.env > postgres/.env
 
