@@ -54,6 +54,8 @@ Now that you are in, lets go to the [Hostinger HPanel](https://hpanel.hostinger.
 
 Then you need to get a Tailscale account and add you home machine to your tailnet. You can do this by downloading the Tailscale app from the [Tailscale website](https://tailscale.com/).
 
+### Create TSAUTHKEY
+
 After its installed, you need a key to add your docker containers to the tailnet. I found the easiest way to do it is to add the key to a docker secret.
 
 1.  Create a folder called `~/.config` on the home directory for the user you are logged in as. 
@@ -63,38 +65,54 @@ After its installed, you need a key to add your docker containers to the tailnet
 5.  Add the key to the `tsauthkey` file.
 6.  Make the file only readable by the user: `chmod 600 ~/.config/tsauthkey`
 
-## DNS
+### Install Tailscale on server
 
-You will need to add a CNAME record to your DNS for the domain you want to use. I am using Cloudflare, but you can use any DNS provider. The record should point to your server's public IP address.
-
-
+1.  Go to Machines 
+2.  Click Add Device and choose Linux Server.
+3.  Click Generate Install Script.
+4.  Copy the script and run on your VPS. 
+5.  Run `sudo tailscale up`
 
 
 ## n8n
 
 1. Navigate into the n8n directory: `cd homelab/n8n`
-2. Copy the example.env file to .env: `cp example.env .env`
-3. Edit the .env file.
+2. Review the .env file created by prep.sh
 
    a. `N8N_HOST` should be the hostname of your server.
-   b.  `WEBHOOK_URL` should be the URL of your server. In my case they are the same.
-   c. `GENERIC_TIMEZONE` should be your timezone.
+   b.  `WEBHOOK_URL` should be the URL of your server.
+   c. `GENERIC_TIMEZONE` should be your timezone. You'll need to update this.
 
 4.  Start the n8n container: `docker compose up -d`
 
 ## Caddy
 
-When I setup Caddy in the first video, I used a simpler method. You may want to review this then skip on to caddy2 later on. 
+1. Navigate to the caddy directory: `cd ~/homelab/caddy`
+2. prep.sh copied Caddyfile.example to Caddyfile and updated all the hostnames using your domain.
+3. Edit the .env file and add your Cloudflare API Token. If you are not using Cloudflare for your domain's DNS, you have some research to do.
 
-Edit the caddyfile/Caddyfile and replace n.mydomain.com with your chosen domain name. 
+To get the Cloudflare API token:
 
-Then start up the server with `docker compose up -d`
+1. Login to the Cloudflare dashboard
+2. In the left sidebar, click Manage Account.
+3. Click Account API Tokens.
+4. Create a new token.
+    a. Permissions should be Zone, Zone, Edit, and Zone, DNS, Edit. 
+    b. Update Zone Resources to point to the domain used in prep.sh
+5. When it shows you the token, copy it and paste it into the .env file.
+
+Finally run `docker compose up -d`. This takes a bit to run. It is building a new version of Caddy with support for Cloudflare.
 
 ## Watchtower
 
 This will update all the containers to the latest version every day at 4am
 
-1. Navigate into the watchtower directory: `cd homelab/watchtower`
+1. Navigate into the watchtower directory: `cd ~/homelab/watchtower`
 2. Edit the .env file and change the `TZ` to where ever you are. 
 3. Start the watchtower container: `docker compose up -d`
 
+## Karakeep
+
+Hopefully you have added the Tailscale app to your local machine, or wherever you have Ollama installed. You will need to edit ~/homelab/karakeep/.env` ane change OLLAMA_BASE_URL to that machine with port 11434. Then make sure you have gemma3:12b, llava, and embeddinggemma:latest models pulled. 
+
+Then run `docker compose up -d`
