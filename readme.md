@@ -6,13 +6,10 @@ This is a collection of docker-compose files for my home lab. There will be a vi
 
 - n8n
 - searxng
-- perplexica
-- firecrawl
 - karakeep
 - openwebui
-- qdrant
-- budibase
 - postgres
+- redis
 - caddy
 - watchtower
 
@@ -31,6 +28,12 @@ This first section is covered in a video on my channel, sponsored by [Hostinger]
 If you want to follow along with everything I am doing, you can sign up for a Hostinger account at [Hostinger](https://hostinger.com/mattw) and use the coupon code `mattw` for 10% off. Select the KVM2 plan. You can choose any template you like, but I am going to start with just the Docker install. Once it is setup, either use the web terminal interface or ssh into the root user. You should see a `ssh root@ipaddress` command. Copy that and run it on your local machine. Enter the password you specified when you created the account. 
 
 Run `git clone https://github.com/technovangelist/homelab.git` to clone this repo. cd into the homelab directory and run `./prep.sh` to prepare the system. Optionally review prep.sh first to see what it does.
+
+Prep.sh will ask for 3 things: 
+
+1. A username you want to login as (it's better if you don't use root)
+2. The password for that user
+3. The domain name you want to use (that you already own). For instance, I have tvl.st and want a n8n server to be reached at n.tvl.st, so here I enter tvl.st and press enter. 
 
 After running the script, you will need to log out. Before logging back in, let's edit your ssh config file to make it easier to connect. Think of the name you would like to use to connect. I use hstgr throughout the videos, so I will use that. If you don't have a config file, create one at `~/.ssh/config`. You want at least this entry:
 
