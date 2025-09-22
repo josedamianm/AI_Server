@@ -146,12 +146,10 @@ echo "✅ User $username created and SSH hardened successfully."
 echo "Log off and then ssh back into the server as $username."
 
 cp n8n/example.env n8n/.env
-# cp caddy/Caddyfile.example caddy/Caddyfile
 cp caddy/example.env caddy/.env
 cp searxng/example.env searxng/.env
 cp searxng/config/settings.yml.example searxng/config/settings.yml
 cp openwebui/example.env openwebui/.env
-cp karakeep/example.env karakeep/.env
 cp postgres/example.env postgres/.env
 cp watchtower/example.env watchtower/.env
 
@@ -166,6 +164,8 @@ sed \
     -e "s|^NEXTAUTH_SECRET=\[generate with <openssl rand -base64 36>\]\s*$|NEXTAUTH_SECRET=${NEXTAUTH_SECRET}|" \
     "$KK_ENV_FILE" > "$tmp_file" && mv "$tmp_file" "$KK_ENV_FILE"
 sed -e "s|mydomain.com|${domain}|g" caddy/Caddyfile.example > caddy/Caddyfile
+sed -e "s|mydomain.com|${domain}|g" karakeep/example.env > karakeep/.env
+
 cd ~
 mv homelab /home/$username/homelab
 chown -R $username:$username /home/$username/homelab
