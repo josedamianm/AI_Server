@@ -54,7 +54,7 @@ while true; do
     fi
 done
 
-read -rp "Enter the domain name you want to use: (you should already own it)" domain; echo
+read -rp "Enter the domain name you want to use: (you should already own it): " domain; echo
 
 # ----------------------------------------------------------------------
 #  3. Abort early if the user already exists
