@@ -145,26 +145,28 @@ systemctl restart ssh      # graceful restart (Ubuntu service name)
 echo "✅ User $username created and SSH hardened successfully."
 echo "Log off and then ssh back into the server as $username."
 
-cp n8n/example.env n8n/.env
 cp caddy/example.env caddy/.env
-cp searxng/example.env searxng/.env
-cp searxng/config/settings.yml.example searxng/config/settings.yml
-cp openwebui/example.env openwebui/.env
-cp postgres/example.env postgres/.env
 cp watchtower/example.env watchtower/.env
 
 MEILI_MASTER_KEY="$(openssl rand -base64 36 | tr -dc 'A-Za-z0-9')"
 NEXTAUTH_SECRET="$(openssl rand -base64 36)"
+SEARXNG_SECRET="$(openssl rand -base64 36)"
+POSTGRES_PASSWORD="$(openssl rand -base64 36)"
+WEBUI_SECRET="$(openssl rand -base64 36)"
 
-KK_ENV_FILE="karakeep/.env"
-
-tmp_file="$(mktemp)"
 sed \
-    -e "s|^MEILI_MASTER_KEY=\[generate with <openssl rand -base64 36 \| tr -dc 'A-Za-z0-9'>\]\s*$|MEILI_MASTER_KEY=${MEILI_MASTER_KEY}|" \
-    -e "s|^NEXTAUTH_SECRET=\[generate with <openssl rand -base64 36>\]\s*$|NEXTAUTH_SECRET=${NEXTAUTH_SECRET}|" \
-    "$KK_ENV_FILE" > "$tmp_file" && mv "$tmp_file" "$KK_ENV_FILE"
+    -e "s|meilimasterkey|${MEILI_MASTER_KEY}|" \
+    -e "s|nextauthsecret|${NEXTAUTH_SECRET}|" \
+    -e "s|mydomain.com|${domain}|g" \
+    karakeep/example.env > karakeep/.env
 sed -e "s|mydomain.com|${domain}|g" caddy/Caddyfile.example > caddy/Caddyfile
 sed -e "s|mydomain.com|${domain}|g" karakeep/example.env > karakeep/.env
+sed -e "s|mydomain.com|${domain}|g" n8n/example.env > n8n/.env
+sed -e "s|mydomain.com|${domain}|g" searxng/example.env > searxng/.env
+sed -e "s|mydomain.com|${domain}|g" -d "s|webuisecret|${WEBUI_SECRET}" openwebui/example.env > openwebui/.env
+sed -e "s|searxngsecret|${SEARXNG_SECRET}|g" searxng/config/settings.yml.example > searxng/config/settings.yml
+sed -e "s|postgrespassword|${POSTGRES_PASSWORD}|g" postgres/example.env > postgres/.env
+
 
 cd ~
 mv homelab /home/$username/homelab
