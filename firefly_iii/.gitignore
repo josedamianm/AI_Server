@@ -1,0 +1,5 @@
+# Data directories (too large, contains sensitive info)
+data/
+
+# Allow empty data dirs to exist in repo
+!data/.gitkeep

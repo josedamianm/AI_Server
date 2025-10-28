@@ -11,8 +11,14 @@ services:
       - 443:443
       - 443:443/udp
     volumes:
-      - ~/homelab/webpages:/webpages
+      - ~/ai_server/webpages:/webpages
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - ./data:/data
       - ./config:/config
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - ai_server_net
+
+networks:
+  ai_server_net:
+    external: true

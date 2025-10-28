@@ -6,3 +6,9 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    networks:
+      - ai_server_net
+
+networks:
+  ai_server_net:
+    external: true
