@@ -9,7 +9,7 @@ PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
 
 # Available services
-SERVICES=("n8n" "ollama" "caddy" "watchtower" "firefly")
+SERVICES=("n8n" "ollama" "caddy" "watchtower" "firefly" "openwebui")
 
 show_usage() {
     echo -e "${BLUE}🐳 AI Server Management Script${NC}"
@@ -49,10 +49,13 @@ start_all() {
     
     echo -e "${GREEN}🤖 Starting ollama...${NC}"
     docker compose -f ollama/docker-compose.yaml up -d
-    
+
     echo -e "${GREEN}💰 Starting firefly...${NC}"
     docker compose -f firefly/docker-compose.yml up -d
-    
+
+    echo -e "${GREEN}🖥️ Starting openwebui...${NC}"
+    docker compose -f openwebui/docker-compose.yaml up -d
+
     echo -e "${GREEN}🌐 Starting caddy...${NC}"
     docker compose -f caddy/docker-compose.yaml up -d
     
@@ -78,11 +81,15 @@ stop_all() {
     # Stop firefly
     echo -e "${RED}💰 Stopping firefly...${NC}"
     docker compose -f firefly/docker-compose.yml down
-    
+
+    # Stop openwebui
+    echo -e "${RED}🖥️ Stopping openwebui...${NC}"
+    docker compose -f openwebui/docker-compose.yaml down
+
     # Stop ollama
     echo -e "${RED}🤖 Stopping ollama...${NC}"
     docker compose -f ollama/docker-compose.yaml down
-    
+
     # Stop n8n
     echo -e "${RED}🔧 Stopping n8n...${NC}"
     docker compose -f n8n/docker-compose.yaml down
@@ -104,7 +111,7 @@ status_all() {
     echo -e "${GREEN}==================${NC}"
     
     echo -e "\n${BLUE}🐳 Running containers:${NC}"
-    docker ps --filter "name=n8n" --filter "name=caddy" --filter "name=ollama" --filter "name=watchtower" --filter "name=firefly" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+    docker ps --filter "name=n8n" --filter "name=caddy" --filter "name=ollama" --filter "name=watchtower" --filter "name=firefly" --filter "name=openwebui" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
     
     echo -e "\n${BLUE}📡 Networks:${NC}"
     docker network ls | grep -E "(ai_server_net|caddy_default|n8n_default|ollama_default|watchtower_default|firefly)"
@@ -112,6 +119,7 @@ status_all() {
     echo -e "\n${BLUE}🔗 Service URLs:${NC}"
     echo "• n8n: https://n8n.aiserver.onmobilespace.com"
     echo "• Firefly III: https://firefly.aiserver.onmobilespace.com"
+    echo "• OpenWebUI: https://openwebui.aiserver.onmobilespace.com"
     echo "• Ollama API: http://localhost:11434 (if exposed)"
     echo "• Caddy Admin: http://localhost:2019"
     
