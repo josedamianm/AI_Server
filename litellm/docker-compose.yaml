@@ -1,5 +1,6 @@
 volumes:
   litellm_storage:
+  postgres_data:
 
 networks:
   ai_server_net:
@@ -20,4 +21,24 @@ services:
       - ai_server_net
     environment:
       - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY:-sk-1234}
-      - DATABASE_URL=sqlite:///./data/lite.db
+      - DATABASE_URL=postgresql://postgres:postgrespassword@litellm-db:5432/main
+      - LITELLM_MODE=PROXY
+      - LITELLM_DISABLE_PRISMA_SCHEMA_UPDATE=true
+    depends_on:
+      - litellm-db
+
+  litellm-db:
+    image: postgres:latest
+    container_name: litellm-db
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    networks:
+      - ai_server_net
+    environment:
+      - POSTGRES_PASSWORD=postgrespassword
+      - POSTGRES_DB=main
+      - POSTGRES_USER=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
