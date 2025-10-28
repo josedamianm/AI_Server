@@ -9,7 +9,7 @@ PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
 
 # Available services
-SERVICES=("n8n" "ollama" "caddy" "watchtower" "firefly" "openwebui")
+SERVICES=("n8n" "ollama" "caddy" "watchtower" "firefly" "openwebui" "litellm")
 
 show_usage() {
     echo -e "${BLUE}🐳 AI Server Management Script${NC}"
@@ -46,7 +46,7 @@ start_all() {
     # Start containers in logical order
     echo -e "${GREEN}🔧 Starting n8n...${NC}"
     docker compose -f n8n/docker-compose.yaml up -d
-    
+
     echo -e "${GREEN}🤖 Starting ollama...${NC}"
     docker compose -f ollama/docker-compose.yaml up -d
 
@@ -56,9 +56,12 @@ start_all() {
     echo -e "${GREEN}🖥️ Starting openwebui...${NC}"
     docker compose -f openwebui/docker-compose.yaml up -d
 
+    echo -e "${GREEN}🧠 Starting litellm...${NC}"
+    docker compose -f litellm/docker-compose.yaml up -d
+
     echo -e "${GREEN}🌐 Starting caddy...${NC}"
     docker compose -f caddy/docker-compose.yaml up -d
-    
+
     echo -e "${GREEN}👁️ Starting watchtower...${NC}"
     docker compose -f watchtower/docker-compose.yaml up -d
     
@@ -69,15 +72,15 @@ start_all() {
 
 stop_all() {
     echo -e "${YELLOW}🛑 Stopping AI Server containers...${NC}"
-    
+
     # Stop watchtower first (monitoring service)
     echo -e "${RED}👁️ Stopping watchtower...${NC}"
     docker compose -f watchtower/docker-compose.yaml down
-    
+
     # Stop caddy (reverse proxy)
     echo -e "${RED}🌐 Stopping caddy...${NC}"
     docker compose -f caddy/docker-compose.yaml down
-    
+
     # Stop firefly
     echo -e "${RED}💰 Stopping firefly...${NC}"
     docker compose -f firefly/docker-compose.yml down
@@ -85,6 +88,10 @@ stop_all() {
     # Stop openwebui
     echo -e "${RED}🖥️ Stopping openwebui...${NC}"
     docker compose -f openwebui/docker-compose.yaml down
+
+    # Stop litellm
+    echo -e "${RED}🧠 Stopping litellm...${NC}"
+    docker compose -f litellm/docker-compose.yaml down
 
     # Stop ollama
     echo -e "${RED}🤖 Stopping ollama...${NC}"
@@ -111,15 +118,16 @@ status_all() {
     echo -e "${GREEN}==================${NC}"
     
     echo -e "\n${BLUE}🐳 Running containers:${NC}"
-    docker ps --filter "name=n8n" --filter "name=caddy" --filter "name=ollama" --filter "name=watchtower" --filter "name=firefly" --filter "name=openwebui" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+    docker ps --filter "name=n8n" --filter "name=caddy" --filter "name=ollama" --filter "name=watchtower" --filter "name=firefly" --filter "name=openwebui" --filter "name=litellm" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
     
     echo -e "\n${BLUE}📡 Networks:${NC}"
-    docker network ls | grep -E "(ai_server_net|caddy_default|n8n_default|ollama_default|watchtower_default|firefly)"
+    docker network ls | grep -E "(ai_server_net|caddy_default|n8n_default|ollama_default|watchtower_default|firefly|litellm_default)"
     
     echo -e "\n${BLUE}🔗 Service URLs:${NC}"
     echo "• n8n: https://n8n.aiserver.onmobilespace.com"
     echo "• Firefly III: https://firefly.aiserver.onmobilespace.com"
     echo "• OpenWebUI: https://openwebui.aiserver.onmobilespace.com"
+    echo "• LiteLLM: https://litellm.aiserver.onmobilespace.com"
     echo "• Ollama API: http://localhost:11434 (if exposed)"
     echo "• Caddy Admin: http://localhost:2019"
     

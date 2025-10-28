@@ -1,0 +1,23 @@
+volumes:
+  litellm_storage:
+
+networks:
+  ai_server_net:
+    external: true
+
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    container_name: litellm
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    volumes:
+      - litellm_storage:/app/data
+    env_file:
+      - .env
+    networks:
+      - ai_server_net
+    environment:
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY:-sk-1234}
+      - DATABASE_URL=sqlite:///./data/lite.db
