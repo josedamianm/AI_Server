@@ -9,7 +9,7 @@ PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
 
 # Available services
-SERVICES=("n8n" "ollama" "caddy" "watchtower" "firefly" "openwebui" "litellm")
+SERVICES=("n8n" "ollama" "caddy" "watchtower" "firefly_iii" "openwebui" "litellm")
 
 show_usage() {
     echo -e "${BLUE}🐳 AI Server Management Script${NC}"
@@ -26,8 +26,8 @@ show_usage() {
     echo "  $0 restart caddy   # Restart only caddy"
     echo "  $0 status n8n      # Status of n8n only"
     echo "  $0 status          # Status of all services"
-    echo "  $0 logs firefly    # Show logs for firefly"
-    echo "  $0 backup firefly  # Backup firefly data"
+    echo "  $0 logs firefly_iii    # Show logs for firefly_iii"
+    echo "  $0 backup firefly_iii  # Backup firefly_iii data"
     echo ""
 }
 
@@ -50,8 +50,8 @@ start_all() {
     echo -e "${GREEN}🤖 Starting ollama...${NC}"
     docker compose -f ollama/docker-compose.yaml up -d
 
-    echo -e "${GREEN}💰 Starting firefly...${NC}"
-    docker compose -f firefly/docker-compose.yml up -d
+    echo -e "${GREEN}💰 Starting firefly_iii...${NC}"
+    docker compose -f firefly_iii/docker-compose.yml up -d
 
     echo -e "${GREEN}🖥️ Starting openwebui...${NC}"
     docker compose -f openwebui/docker-compose.yaml up -d
@@ -81,9 +81,9 @@ stop_all() {
     echo -e "${RED}🌐 Stopping caddy...${NC}"
     docker compose -f caddy/docker-compose.yaml down
 
-    # Stop firefly
-    echo -e "${RED}💰 Stopping firefly...${NC}"
-    docker compose -f firefly/docker-compose.yml down
+    # Stop firefly_iii
+    echo -e "${RED}💰 Stopping firefly_iii...${NC}"
+    docker compose -f firefly_iii/docker-compose.yml down
 
     # Stop openwebui
     echo -e "${RED}🖥️ Stopping openwebui...${NC}"
@@ -118,10 +118,10 @@ status_all() {
     echo -e "${GREEN}==================${NC}"
     
     echo -e "\n${BLUE}🐳 Running containers:${NC}"
-    docker ps --filter "name=n8n" --filter "name=caddy" --filter "name=ollama" --filter "name=watchtower" --filter "name=firefly" --filter "name=openwebui" --filter "name=litellm" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+    docker ps --filter "name=n8n" --filter "name=caddy" --filter "name=ollama" --filter "name=watchtower" --filter "name=firefly_iii" --filter "name=openwebui" --filter "name=litellm" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
     
     echo -e "\n${BLUE}📡 Networks:${NC}"
-    docker network ls | grep -E "(ai_server_net|caddy_default|n8n_default|ollama_default|watchtower_default|firefly|litellm_default)"
+    docker network ls | grep -E "(ai_server_net|caddy_default|n8n_default|ollama_default|watchtower_default|firefly_iii|litellm_default)"
     
     echo -e "\n${BLUE}🔗 Service URLs:${NC}"
     echo "• n8n: https://n8n.aiserver.onmobilespace.com"
@@ -135,8 +135,8 @@ status_all() {
     echo "• Updates check: 11th of each month at 04:00 (Europe/Madrid)"
     
     echo -e "\n${BLUE}💾 Disk usage:${NC}"
-    if [ -d "firefly/data" ]; then
-        echo "• Firefly data: $(du -sh firefly/data 2>/dev/null | cut -f1)"
+    if [ -d "firefly_iii/data" ]; then
+        echo "• Firefly data: $(du -sh firefly_iii/data 2>/dev/null | cut -f1)"
     fi
     if [ -d "n8n/n8n_storage" ]; then
         echo "• n8n data: $(du -sh n8n/n8n_storage 2>/dev/null | cut -f1)"
@@ -147,14 +147,14 @@ backup_service() {
     local service=$1
     
     case $service in
-        firefly)
+        firefly_iii)
             echo -e "${BLUE}💾 Backing up Firefly III...${NC}"
-            if [ -f "firefly/backup.sh" ]; then
-                cd firefly && ./backup.sh
+            if [ -f "firefly_iii/backup.sh" ]; then
+                cd firefly_iii && ./backup.sh
                 cd ..
                 echo -e "${GREEN}✅ Firefly backup completed!${NC}"
             else
-                echo -e "${RED}❌ Backup script not found: firefly/backup.sh${NC}"
+                echo -e "${RED}❌ Backup script not found: firefly_iii/backup.sh${NC}"
                 exit 1
             fi
             ;;
@@ -195,9 +195,9 @@ manage_service() {
         exit 1
     fi
     
-    # Determine compose file name (firefly uses .yml, others use .yaml)
+    # Determine compose file name (firefly_iii uses .yml, others use .yaml)
     local compose_file="$service/docker-compose.yaml"
-    if [[ $service == "firefly" ]]; then
+    if [[ $service == "firefly_iii" ]]; then
         compose_file="$service/docker-compose.yml"
     fi
     
@@ -239,10 +239,10 @@ manage_service() {
                 docker compose -f $compose_file logs --tail=10
             fi
             
-            # Show disk usage for firefly
-            if [[ $service == "firefly" ]] && [ -d "firefly/data" ]; then
+            # Show disk usage for firefly_iii
+            if [[ $service == "firefly_iii" ]] && [ -d "firefly_iii/data" ]; then
                 echo -e "\n${BLUE}💾 Disk usage:${NC}"
-                du -sh firefly/data/* 2>/dev/null
+                du -sh firefly_iii/data/* 2>/dev/null
             fi
             ;;
         logs)
