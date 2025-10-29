@@ -11,8 +11,6 @@ services:
     image: ghcr.io/berriai/litellm:main-latest
     container_name: litellm
     restart: unless-stopped
-    ports:
-      - "4000:4000"
     volumes:
       - litellm_storage:/app/data
     env_file:
