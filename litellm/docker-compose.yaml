@@ -22,6 +22,8 @@ services:
       - DATABASE_URL=postgresql://postgres:postgrespassword@litellm-db:5432/main
       - LITELLM_MODE=PROXY
       - LITELLM_DISABLE_PRISMA_SCHEMA_UPDATE=true
+      - LITELLM_CORS_ALLOWED_ORIGINS=https://openwebui.aiserver.onmobilespace.com
+      - LITELLM_CORS_ALLOWED_METHODS=GET,POST,PUT,DELETE,OPTIONS
     depends_on:
       - litellm-db
 
